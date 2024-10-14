@@ -8,27 +8,28 @@ async function main() {
     const outputPath = './scripts/target/output.json';
 
     const inputData = JSON.parse(fs.readFileSync(inputPath, 'utf8'));
-    const types = inputData.types;
     const count = inputData.count;
 
     const leafs = [];
     const inputs = [];
 
     for (let i = 0; i < count; i++) {
-        const data = [];
-        for (let j = 0; j < types.length; j++) {
-            if (types[j] === 'address') {
-                data.push(ethers.utils.hexZeroPad(inputData.values[i][j], 32));
-            } else if (types[j] === 'uint') {
-                data.push(ethers.utils.hexZeroPad(ethers.BigNumber.from(inputData.values[i][j]).toHexString(), 32));
-            }
-        }
-        const leaf = keccak256(ethers.utils.defaultAbiCoder.encode(['bytes32[]'], [data]));
+        const account = inputData.values[i][0];
+        const amount = inputData.values[i][1];
+        console.log(account);
+        console.log(amount);
+        
+        const leaf = keccak256(
+            ethers.utils.solidityPack(
+                ['bytes32'],
+                [ethers.utils.keccak256(ethers.utils.defaultAbiCoder.encode(['address', 'uint256'], [account, amount]))]
+            )
+        );
         leafs.push(leaf);
         inputs.push(inputData.values[i]);
     }
 
-    const merkleTree = new MerkleTree(leafs, keccak256, { sortPairs: false });
+    const merkleTree = new MerkleTree(leafs, keccak256, { sortPairs: true });
     const root = merkleTree.getRoot().toString('hex');
 
     console.log(`Merkle Root: 0x${root}`);
