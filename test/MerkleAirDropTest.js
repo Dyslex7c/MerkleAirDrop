@@ -7,8 +7,10 @@ describe("MerkleAirDrop", function () {
   const amountToCollect = ethers.utils.parseEther("25");
   const amountToSend = amountToCollect.mul(4);
   const proofOne = '0xf884e61898c71567fd4f44aa020453ed544cb775949e2087043630858aa9e609';
+  const proofOneBytes32Hex = ethers.utils.hexZeroPad(proofOne, 32);
   const proofTwo = '0xf19a9e842b5a96e6e829203e375dfae8688610006eff2ecee5b1d5171631c970';
-  const proof = [proofOne, proofTwo];
+  const proofTwoBytes32Hex = ethers.utils.hexZeroPad(proofTwo, 32);
+  const proof = [proofOneBytes32Hex, proofTwoBytes32Hex];  
 
   before(async function () {
     [owner, gasPayer, user] = await ethers.getSigners();
@@ -29,11 +31,11 @@ describe("MerkleAirDrop", function () {
     const startingBalance = await token.balanceOf(user.address);
 
     const messageHash = await airdrop.getMessageHash(user.address, amountToCollect);
+    const messageHashBytes32 = ethers.utils.arrayify(messageHash);
 
-    const signature = await user.signMessage(ethers.utils.arrayify(messageHash));
+    const signature = await user.signMessage(messageHashBytes32);
     const sig = ethers.utils.splitSignature(signature);
-    console.log(sig);
-    
+
     const { v, r, s } = sig;
 
     await airdrop.connect(gasPayer).claim(user.address, amountToCollect, proof, v, r, s);

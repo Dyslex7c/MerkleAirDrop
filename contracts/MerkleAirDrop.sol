@@ -21,14 +21,14 @@ contract MerkleAirDrop is EIP712 {
     IERC20 private immutable i_airdropToken;
     mapping (address claimer => bool claimed) private s_hasclaimed;
 
-    bytes32 private constant MESSAGE_TYPEHASH = keccak256("AirDropClaim(address account, uint256 amount)");
+    bytes32 private constant MESSAGE_TYPEHASH = keccak256("AirDropClaim(address account,uint256 amount)");
 
     struct AirDropClaim {
         address account;
         uint256 amount;
     }
 
-    event Claim(address account, uint256 amount);
+    event Claimed(address account, uint256 amount);
 
     constructor(bytes32 merkleRoot, IERC20 airdropToken) EIP712("MerkleAirDrop", "1") {
         i_merkleRoot = merkleRoot;
@@ -49,7 +49,7 @@ contract MerkleAirDrop is EIP712 {
             revert MerkleAirDrop__InvalidProof();
         }
         s_hasclaimed[account] = true;
-        emit Claim(account, amount);
+        emit Claimed(account, amount);
         i_airdropToken.safeTransfer(account, amount);
     }
 
