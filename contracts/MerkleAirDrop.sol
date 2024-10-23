@@ -6,12 +6,13 @@ import {IERC20, SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeE
 import {MerkleProof} from "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 import {EIP712} from "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
 import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import {MessageHashUtils} from "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol";
 
 contract MerkleAirDrop is EIP712 {
     using ECDSA for bytes32;
     using SafeERC20 for IERC20;
 
-    error MerkleAirDrop__InvalidProof();
+    error MerkleAirDrop__InvalidProof(bytes32 leaf);
     error MerkleAirDrop__AlreadyClaimed();
     error MerkleAirDrop__InvalidSignature();
 
@@ -40,13 +41,14 @@ contract MerkleAirDrop is EIP712 {
             revert MerkleAirDrop__AlreadyClaimed();
         }
 
-        if (!_isValidSignature(account, getMessageHash(account, amount), v, r, s)) {
+        bytes32 hash2 = MessageHashUtils.toEthSignedMessageHash(getMessageHash(account, amount));
+        if (!_isValidSignature(account, hash2, v, r, s)) {
             revert MerkleAirDrop__InvalidSignature();
         }
 
-        bytes32 leaf = keccak256(bytes.concat(keccak256(abi.encode(account, amount))));
+        bytes32 leaf = keccak256(abi.encode(account, amount));
         if (!MerkleProof.verify(merkleProof, i_merkleRoot, leaf)) {
-            revert MerkleAirDrop__InvalidProof();
+            revert MerkleAirDrop__InvalidProof(leaf);
         }
         s_hasclaimed[account] = true;
         emit Claimed(account, amount);

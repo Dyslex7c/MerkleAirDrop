@@ -14,8 +14,6 @@ declare global {
 }
 
 export default function Home() {
-  const [amount, setAmount] = useState("");
-  const [merkleProof, setMerkleProof] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -53,7 +51,7 @@ export default function Home() {
       setMessage("Airdrop claimed successfully!");
     } catch (error) {
       console.error("Error claiming airdrop:", error);
-      setMessage("Failed to claim airdrop. Please check your input and try again.");
+      setMessage("Failed to claim airdrop. Please connect to your wallet and try again.");
     } finally {
       setLoading(false);
     }
@@ -65,20 +63,6 @@ export default function Home() {
         <ConnectButton client={client} />
 
         <div className="mt-8">
-          <input
-            type="text"
-            placeholder="Amount to Claim"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            className="border p-2 rounded mr-2"
-          />
-          <input
-            type="text"
-            placeholder="Merkle Proof (comma-separated)"
-            value={merkleProof}
-            onChange={(e) => setMerkleProof(e.target.value)}
-            className="border p-2 rounded mr-2"
-          />
           <button 
             onClick={claimAirdrop} 
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300"

@@ -3,14 +3,14 @@ const { ethers } = require("hardhat");
 
 describe("MerkleAirDrop", function () {
   let airdrop, token, owner, gasPayer, user;
-  const merkleRoot = '0xfb74e1a6f36e429e034de0ae290ff93edfa336d6e0d431cb241d4d98ceda2e6b';
+  const merkleRoot = '0x4ff362e98173b4ee8591ed5c63ef3a9949ed22e89ad01819cf2816447470b65f';
   const amountToCollect = ethers.utils.parseEther("25");
   const amountToSend = amountToCollect.mul(4);
-  const proofOne = '0xf884e61898c71567fd4f44aa020453ed544cb775949e2087043630858aa9e609';
+  const proofOne = '0xad31f89cecc330a3a4d871bfded2385be27b2556d8e54b7c2a8b36b505574354';
   const proofOneBytes32Hex = ethers.utils.hexZeroPad(proofOne, 32);
-  const proofTwo = '0xf19a9e842b5a96e6e829203e375dfae8688610006eff2ecee5b1d5171631c970';
+  const proofTwo = '0xa2ac5624afb7c3d538cd894896ad2dde185eda23d89fd6b0b2b888f30840e25d';
   const proofTwoBytes32Hex = ethers.utils.hexZeroPad(proofTwo, 32);
-  const proof = [proofOneBytes32Hex, proofTwoBytes32Hex];  
+  const proof = [proofOneBytes32Hex, proofTwoBytes32Hex];
 
   before(async function () {
     [owner, gasPayer, user] = await ethers.getSigners();
