@@ -6,9 +6,9 @@ describe("MerkleAirDrop", function () {
   const merkleRoot = '0x4ff362e98173b4ee8591ed5c63ef3a9949ed22e89ad01819cf2816447470b65f';
   const amountToCollect = ethers.utils.parseEther("25");
   const amountToSend = amountToCollect.mul(4);
-  const proofOne = '0xad31f89cecc330a3a4d871bfded2385be27b2556d8e54b7c2a8b36b505574354';
+  const proofOne = '0xc045d7f7afb71cb185fa454921f0b415f7212428f2b756084713abf4f7502d9c';
   const proofOneBytes32Hex = ethers.utils.hexZeroPad(proofOne, 32);
-  const proofTwo = '0xa2ac5624afb7c3d538cd894896ad2dde185eda23d89fd6b0b2b888f30840e25d';
+  const proofTwo = '0xc425ab69b1d4f1562b941890f212dc45f05008396cb8af71eb8168dd656ed530';
   const proofTwoBytes32Hex = ethers.utils.hexZeroPad(proofTwo, 32);
   const proof = [proofOneBytes32Hex, proofTwoBytes32Hex];
 

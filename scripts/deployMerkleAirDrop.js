@@ -1,7 +1,7 @@
 const { ethers } = require("hardhat");
 
 async function main() {
-    const ROOT = "0xfb74e1a6f36e429e034de0ae290ff93edfa336d6e0d431cb241d4d98ceda2e6b";
+    const ROOT = "0x4ff362e98173b4ee8591ed5c63ef3a9949ed22e89ad01819cf2816447470b65f";
     const AMOUNT_TO_TRANSFER = ethers.utils.parseEther("100");
 
     const OrionToken = await ethers.getContractFactory("OrionToken");
